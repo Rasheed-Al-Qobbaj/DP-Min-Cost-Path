@@ -1,44 +1,44 @@
-import numpy as np
-import matplotlib.pyplot as plt
+def read_data(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
 
-# Example data for petrol cost and hotel cost
-petrol_costs = np.array([[0, 10, 20, 30],  # City 1
-                         [10, 0, 25, 35],  # City 2
-                         [20, 25, 0, 15],  # City 3
-                         [30, 35, 15, 0]])  # City 4
+    # Remove newline characters
+    lines = [line.strip() for line in lines]
 
-hotel_costs = np.array([50, 60, 70, 80])  # Hotel costs for each city
+    # Get the number of cities
+    num_cities = int(lines[0])
 
+    # Get the start and end cities
+    start_city, end_city = lines[1].split(', ')
 
-def min_cost_traversal(N, petrol_costs, hotel_costs):
-    M = len(petrol_costs)  # Number of cities
-    dp = np.zeros((N + 1, M))  # Initialize dynamic programming table
-
-    # Fill in base cases
-    dp[0] = 0
-
-    # Iterate over stages
-    for stage in range(1, N + 1):
-        for city in range(M):
-            # Compute minimum cost for current stage and city
-            dp[stage][city] = min(
-                dp[stage - 1][prev_city] + petrol_costs[prev_city][city] + hotel_costs[city] for prev_city in range(M))
-
-    return dp
+    # Initialize an empty dictionary to hold the city data
+    city_data = {}
 
 
-# Example usage
-N = 3  # Number of stopovers
-dp_table = min_cost_traversal(N, petrol_costs, hotel_costs)
+    # Parse the city data
+    for line in lines[2:]:
+        # Split the line by ', ' and unpack the result into city and adjacent_cities
+        city, *adjacent_cities = line.split(', ')
+        # removes the square brackets from the start and end of the element, splits it at each comma
+        adjacent_cities = [tuple(adj_city[1:-1].split(',')) for adj_city in adjacent_cities]
+        # checks if the length of the element is 3, if it is, it adds it to the city_data dictionary
+        city_data[city] = [(adj_city[0], int(adj_city[1]), int(adj_city[2])) for adj_city in adjacent_cities if len(adj_city) == 3]
 
-# Visualize the dynamic programming table as a heatmap
-plt.figure(figsize=(8, 6))
-plt.imshow(dp_table, cmap='viridis', origin='lower', aspect='auto')
-plt.colorbar(label='Minimum Cost')
-plt.xlabel('City')
-plt.ylabel('Stage')
-plt.title('Dynamic Programming Table')
-plt.xticks(np.arange(len(hotel_costs)), np.arange(1, len(hotel_costs) + 1))
-plt.yticks(np.arange(N + 1), np.arange(N + 1))
-plt.grid(visible=False)
-plt.show()
+    # Add a key for the end city to the city_data dictionary
+    city_data[end_city] = []
+
+    return num_cities, start_city, end_city, city_data
+
+
+
+def main():
+    file_path = 'input.txt'
+    num_cities, start_city, end_city, city_data = read_data(file_path)
+    print(num_cities)
+    print(start_city)
+    print(end_city)
+    print(city_data)
+
+
+if __name__ == '__main__':
+    main()
