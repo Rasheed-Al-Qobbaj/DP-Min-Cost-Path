@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DP Path Finder Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Number of Cities: {{ num_cities }}</h1>
+    <h2>Start City: {{ start_city }}</h2>
+    <h2>End City: {{ end_city }}</h2>
+    <h2>DP Table:</h2>
+    <table>
+        <tr>
+            <th></th>
+            {% for city in dp_table.keys() %}
+            <th>{{ city }}</th>
+            {% endfor %}
+        </tr>
+        {% for city, costs in dp_table.items() %}
+        <tr>
+            <th>{{ city }}</th>
+            {% for cost in costs.values() %}
+            <td>{{ cost if cost != float('inf') else 'inf' }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Minimum Cost: {{ min_cost }}</h2>
+    <h2>Optimal Path: {{ ' -> '.join(path) }}</h2>
+    <h2>Alternate Paths:</h2>
+    {% for cost, path in alternate_paths %}
+    <h3>Cost: {{ cost }}</h3>
+    <h3>Path: {{ ' -> '.join(path) }}</h3>
+    {% endfor %}
+</body>
+</html>

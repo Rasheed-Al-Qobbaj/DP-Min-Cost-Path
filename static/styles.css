@@ -1,0 +1,37 @@
+body {
+    background-color: skyblue;
+    font-family: Arial, sans-serif;
+}
+
+form {
+    margin: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table, th, td {
+    border: 1px solid;
+    padding: 10px;
+    text-align: center;
+}
+
+th, td {
+    background-color: #000000;
+    color: white;
+}
+
+th {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+td {
+    font-size: 18px;
+}

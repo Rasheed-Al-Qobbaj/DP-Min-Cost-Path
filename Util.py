@@ -94,6 +94,43 @@ def find_optimal_path(dp_table, start_city, end_city):
 
     return min_cost, path
 
+def find_alternate_paths(dp_table, start_city, end_city):
+    paths = []
+    for _ in range(3):  # find three paths
+        # Initialize the previous city dictionary
+        prev_city = {city: None for city in dp_table}
+
+        # For each city, find the city from which we can arrive at the current city with the minimum cost
+        for city in dp_table:
+            for other_city in dp_table:
+                if city != other_city and dp_table[start_city][city] == dp_table[start_city][other_city] + dp_table[other_city][city]:
+                    prev_city[city] = other_city
+
+        # Start from the end city and backtrack to the start city
+        path = []
+        current_city = end_city
+        while current_city is not None:
+            path.append(current_city)
+            current_city = prev_city[current_city]
+
+        # Reverse the path
+        path = path[::-1]
+
+        # Get the cost
+        cost = dp_table[start_city][end_city]
+
+        # Add the path and its cost to the paths list
+        paths.append((cost, path))
+
+        # Remove the last edge in the path from the dp_table to find an alternate path in the next iteration
+        if len(path) > 1:
+            dp_table[path[-2]][path[-1]] = float('inf')
+
+    # Sort the paths by cost
+    paths.sort()
+
+    return paths  # returns a list of tuples, where each tuple is (cost, path)
+
 def main():
     file_path = 'input.txt'
     num_cities, start_city, end_city, city_data = read_data(file_path)
